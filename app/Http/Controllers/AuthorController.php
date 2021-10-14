@@ -14,7 +14,8 @@ class AuthorController extends Controller
      */
     public function index()
     {
-        //
+        $authors= Author::all();
+        return view("author.index", ["authors" =>$authors]);
     }
 
     /**
@@ -80,6 +81,7 @@ class AuthorController extends Controller
      */
     public function destroy(Author $author)
     {
-        //
+        //kaip patikrinti ar autorius turi knygu ir neleisti jo istrinti?
+        $author->delete();
     }
 }
