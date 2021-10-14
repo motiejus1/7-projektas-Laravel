@@ -58,8 +58,8 @@ class BookController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function show(Book $book)
-    {
-        //
+    {   //$author = Author::all();//Kiek irasu sita funkcija? 30 autoriu masyvas
+        return view("book.show", ["book" => $book]);
     }
 
     /**
@@ -101,6 +101,7 @@ class BookController extends Controller
      */
     public function destroy(Book $book)
     {
-        //
+        $book->delete();
+        return redirect()->route("book.index");
     }
 }
