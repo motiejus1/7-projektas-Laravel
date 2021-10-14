@@ -2,7 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Author;
+
 use App\Book;
+
 use Illuminate\Http\Request;
 
 class BookController extends Controller
@@ -14,7 +17,8 @@ class BookController extends Controller
      */
     public function index()
     {
-        //
+        $books = Book::all();
+        return view("book.index", ["books" => $books]);
     }
 
     /**
@@ -24,7 +28,8 @@ class BookController extends Controller
      */
     public function create()
     {
-        //
+        $authors = Author::all();
+        return view("book.create", ["authors" => $authors]);
     }
 
     /**
@@ -35,7 +40,15 @@ class BookController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $book = new Book;
+        //duomenu bazes lenteles pavadinimas = input/select/texarea laukeliu pavadinimas
+        $book->name = $request->book_name;
+        $book->description = $request->book_description;
+        $book->author_id = $request->book_authorid;
+
+        $book->save();
+
+        return redirect()->route("book.index");
     }
 
     /**
@@ -56,8 +69,10 @@ class BookController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function edit(Book $book)
+
     {
-        //
+        $authors = Author::all();
+        return view("book.edit",["book"=>$book, "authors"=>$authors]);
     }
 
     /**
@@ -69,7 +84,13 @@ class BookController extends Controller
      */
     public function update(Request $request, Book $book)
     {
-        //
+        $book->name = $request->book_name;
+        $book->description = $request->book_description;
+        $book->author_id = $request->book_authorid;
+
+        $book->save();
+
+        return redirect()->route("book.index");
     }
 
     /**
