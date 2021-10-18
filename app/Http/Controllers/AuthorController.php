@@ -15,6 +15,7 @@ class AuthorController extends Controller
     public function index()
     {
         $authors= Author::all();
+
         return view("author.index", ["authors" =>$authors]);
     }
 
@@ -47,7 +48,18 @@ class AuthorController extends Controller
      */
     public function show(Author $author)
     {
-        //
+
+        $books = $author->authorBooks; //visas knygas kurios priklauso autoriui
+        //kokio tipo yra kintamasis $books?
+        //1 objektas = 1 irasas
+        // 2 ir daugiau objektai
+
+        // objektu masyvas / kolekcija(collection) - masyva filtruoti
+
+        //count($books);
+        $books_count = $books->count();
+
+        return view("author.show",["author"=>$author, "books"=> $books, "books_count" => $books_count]);
     }
 
     /**
@@ -79,9 +91,33 @@ class AuthorController extends Controller
      * @param  \App\Author  $author
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Author $author)
+    public function destroy(Author $author, Request $request)
     {
         //kaip patikrinti ar autorius turi knygu ir neleisti jo istrinti?
+
+        //jei negalima trinti, parodytu alert
+
+        //sesija = cookie
+
+
+        //destroy - jinai turi sugeneruoti pranesima(isitryne sekmingai/nesekmingai)
+        //index faila
+        //i sesija(session)
+        //globalus kintamasis, sukuriamas narsykleje
+        //i sesija mes galime irasyti bet kokio tipo kintamaji
+
+
+        $books_count = $author->authorBooks->count(); //gausiu knygu skaiciu
+        //count - funkcija ()
+        //priklauso modeliui, ir jinai grazina tam tikra objektu sarasa
+
+
+
+        if($books_count!=0) {
+            return redirect()->route("author.index")->with('error_message','Ištrinti negalima, nes autorius turi knygų');
+        }
+
         $author->delete();
+        return redirect()->route("author.index")->with('success_message','Autorius sėkmingai ištrintas');
     }
 }
